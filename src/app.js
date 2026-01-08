@@ -9,6 +9,7 @@ const donationRoutes = require('./routes/donationRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const statisticsRoutes = require('./routes/statisticsRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const aboutRoutes = require('./routes/aboutRoutes'); // ADD THIS LINE
 
 const app = express();
 
@@ -48,6 +49,7 @@ app.use('/api/donations', donationRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/statistics', statisticsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/about', aboutRoutes); // ADD THIS LINE
 
 // Health check route
 app.get('/health', (req, res) => {
