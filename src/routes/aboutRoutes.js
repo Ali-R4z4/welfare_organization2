@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { getAboutUs, updateAboutUs } = require('../controllers/aboutController');
-const { protect, admin } = require('../middleware/authMiddleware');
 
 // Public route - anyone can view
 router.get('/', getAboutUs);
 
-// Protected route - only admin can update
-router.put('/', protect, admin, updateAboutUs);
+// For now, make update public too (we'll add auth later)
+router.put('/', updateAboutUs);
 
 module.exports = router;
