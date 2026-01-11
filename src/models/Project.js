@@ -1,3 +1,4 @@
+// backend/src/models/Project.js
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema(
@@ -18,24 +19,36 @@ const projectSchema = new mongoose.Schema(
       required: [true, 'Project location is required'],
       trim: true
     },
-    image: {
+    // CHANGED: image to images (array)
+    images: [{
       type: String,
-      required: [true, 'Project image is required']
+      required: [true, 'At least one project image is required']
+    }],
+    // NEW: category field
+    category: {
+      type: String,
+      required: [true, 'Project category is required'],
+      enum: ['healthcare', 'education', 'emergency', 'food', 'shelter', 'other'],
+      default: 'healthcare'
     },
-    date: {
+    // REMOVED: date field (we'll use startDate instead)
+    startDate: {
       type: Date,
-      required: [true, 'Project date is required']
+      default: Date.now
+    },
+    endDate: {
+      type: Date
     },
     status: {
       type: String,
-      enum: ['ongoing', 'completed', 'upcoming'],
-      default: 'ongoing'
+      enum: ['active', 'completed', 'upcoming'],
+      default: 'active'
     },
     beneficiaries: {
       type: Number,
       default: 0
     },
-    // NEW FIELDS FOR DONATIONS
+    // Optional: You can keep or remove these donation fields
     targetAmount: {
       type: Number,
       default: 0,
@@ -45,11 +58,6 @@ const projectSchema = new mongoose.Schema(
       type: Number,
       default: 0,
       min: [0, 'Raised amount cannot be negative']
-    },
-    currency: {
-      type: String,
-      enum: ['USD', 'PKR', 'EUR', 'GBP'],
-      default: 'PKR'
     },
     donationCount: {
       type: Number,
@@ -71,5 +79,4 @@ projectSchema.virtual('percentageRaised').get(function() {
 projectSchema.set('toJSON', { virtuals: true });
 projectSchema.set('toObject', { virtuals: true });
 
-// FIX: Check if model exists before creating
 module.exports = mongoose.models.Project || mongoose.model('Project', projectSchema);

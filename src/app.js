@@ -8,12 +8,27 @@ const donorRoutes = require('./routes/donorRoutes');
 const donationRoutes = require('./routes/donationRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const statisticsRoutes = require('./routes/statisticsRoutes');
-const contactRoutes = require('./routes/contactRoutes'); // Add this line
+const contactRoutes = require('./routes/contactRoutes');
+const aboutRoutes = require('./routes/aboutRoutes'); // ADD THIS LINE
 
 const app = express();
 
+// CORS Configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://welfare-organization-nu.vercel.app',
+    'https://welfare-organization-blg28vqww-aliraza644178-gmailcoms-projects.vercel.app',
+    'https://*.vercel.app',
+    'https://vercel.app'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -33,7 +48,8 @@ app.use('/api/donors', donorRoutes);
 app.use('/api/donations', donationRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/statistics', statisticsRoutes);
-app.use('/api/contact', contactRoutes); // NEW ROUTE REGISTRATION
+app.use('/api/contact', contactRoutes);
+app.use('/api/about', aboutRoutes); // ADD THIS LINE
 
 // Health check route
 app.get('/health', (req, res) => {
