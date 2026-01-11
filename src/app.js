@@ -18,6 +18,8 @@ const corsOptions = {
   origin: [
     'http://localhost:5173',
     'http://localhost:3000',
+    'https://pakistanmedicointernational.com',
+    'https://www.pakistanmedicointernational.com',
     'https://welfare-organization-nu.vercel.app',
     'https://welfare-organization-blg28vqww-aliraza644178-gmailcoms-projects.vercel.app',
     'https://*.vercel.app',
