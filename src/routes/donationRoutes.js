@@ -1,42 +1,29 @@
-// backend/src/routes/donationRoutes.js
 const express = require('express');
 const router = express.Router();
+
 const {
   createDonation,
   getAllDonations,
   getDonation,
-  verifyDonation,
-  deleteDonation,
-  getDonationStats,
-  getDonationSettings,
-  updateDonationSettings
+  getMyDonations,
+  getProjectDonations,
+  updateDonation,
+  deleteDonation
 } = require('../controllers/donationController');
-const { protect, adminOnly } = require('../middleware/authMiddleware');
 
-// ========== PUBLIC ROUTES ==========
-// Get donation settings (for donation page)
-router.get('/settings', getDonationSettings);
+const { protect, protectDonor } = require('../middleware/authMiddleware');
 
-// Get specific donation (for status checking)
-router.get('/:id', getDonation);
-
-// Create new donation
+// Public routes
 router.post('/', createDonation);
+router.get('/project/:id', getProjectDonations);
 
-// ========== PROTECTED ADMIN ROUTES ==========
-// Get all donations with filters
-router.get('/', protect, adminOnly, getAllDonations);
+// Protected routes (Donor)
+router.get('/my', protectDonor, getMyDonations);
 
-// Get donation statistics
-router.get('/statistics/summary', protect, adminOnly, getDonationStats);
-
-// Update donation settings
-router.put('/settings', protect, adminOnly, updateDonationSettings);
-
-// Verify/update donation status
-router.put('/:id/verify', protect, adminOnly, verifyDonation);
-
-// Delete donation
-router.delete('/:id', protect, adminOnly, deleteDonation);
+// Protected routes (Admin)
+router.get('/', protect, getAllDonations);
+router.get('/:id', protect, getDonation);
+router.put('/:id', protect, updateDonation);
+router.delete('/:id', protect, deleteDonation);
 
 module.exports = router;

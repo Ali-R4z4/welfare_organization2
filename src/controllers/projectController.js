@@ -1,17 +1,17 @@
-// backend/src/controllers/projectController.js
-const Project = require('../models/Project');
+// src/controllers/projectController.js
+
+const Project = require('../models/project');
 
 // @desc    Get all projects
 // @route   GET /api/projects
 // @access  Public
 exports.getAllProjects = async (req, res) => {
   try {
-    const { status, category, location } = req.query;
+    const { status, location } = req.query;
     
     // Build query
     let query = {};
     if (status) query.status = status;
-    if (category) query.category = category;
     if (location) query.location = new RegExp(location, 'i');
 
     const projects = await Project.find(query).sort({ createdAt: -1 });
@@ -62,46 +62,16 @@ exports.getProject = async (req, res) => {
 // @access  Private (Admin only)
 exports.createProject = async (req, res) => {
   try {
-    const { 
-      title, 
-      description, 
-      location, 
-      images, 
-      category,
-      status, 
-      beneficiaries,
-      targetAmount,
-      startDate,
-      endDate
-    } = req.body;
-
-    // Validate required fields
-    if (!title || !description || !location) {
-      return res.status(400).json({
-        success: false,
-        message: 'Title, description, and location are required'
-      });
-    }
-
-    // Validate images (changed from image to images)
-    if (!images || images.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'At least one image is required'
-      });
-    }
+    const { title, description, location, image, date, status, beneficiaries } = req.body;
 
     const project = await Project.create({
       title,
       description,
       location,
-      images, // CHANGED: image to images
-      category,
-      status: status || 'active',
-      beneficiaries: beneficiaries || 0,
-      targetAmount: targetAmount || 0,
-      startDate: startDate || new Date(),
-      endDate: endDate || null
+      image,
+      date,
+      status,
+      beneficiaries
     });
 
     res.status(201).json({
@@ -110,7 +80,6 @@ exports.createProject = async (req, res) => {
       data: project
     });
   } catch (error) {
-    console.error('Create project error:', error);
     res.status(400).json({
       success: false,
       message: 'Failed to create project',
@@ -148,7 +117,6 @@ exports.updateProject = async (req, res) => {
       data: project
     });
   } catch (error) {
-    console.error('Update project error:', error);
     res.status(400).json({
       success: false,
       message: 'Failed to update project',
